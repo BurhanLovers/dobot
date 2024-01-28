@@ -39,40 +39,18 @@ def text_handler(m: Message):
             return
 
         if m.text in command_dict.keys():
-            globals()[command_dict[m.text]](m)
+            command_function = globals().get(command_dict[m.text])
+            if command_function:
+                if command_dict[m.text] == 'rebuild_vps':
+                    rebuild_vps(m)  # Tambahkan argumen m ke fungsi rebuild_vps_os
+                else:
+                    command_function(m)
+            else:
+                bot.send_message(
+                    chat_id=m.chat.id,
+                    text="Perintah tidak ditemukan."
+                )
 
     except Exception as e:
         traceback.print_exc()
         handle_exception(m, e)
-
-
-@bot.callback_query_handler(func=lambda call: True)
-def callback_query_handler(call: CallbackQuery):
-    try:
-        logger.info(call)
-
-        if call.from_user.id not in bot_admins:
-            return
-
-        callback_data = urlparse.urlparse(call.data)
-        func_name = callback_data.path
-        data = parse_qs(callback_data.query)
-        if func_name in globals():
-            args = [call]
-            if len(data.keys()) > 0:
-                args.append(data)
-
-            globals()[func_name](*args)
-
-    except Exception as e:
-        traceback.print_exc()
-        handle_exception(call, e)
-
-
-def handle_exception(d: Union[Message, CallbackQuery], e):
-    bot.send_message(
-        text=f'Melakukan kesalahan\n'
-             f'<code>{e}</code>',
-        chat_id=d.from_user.id,
-        parse_mode='HTML'
-    )
