@@ -27,8 +27,8 @@ command_dict = {
 
     '/add_vps': 'create_droplet',
     '/sett_vps': 'manage_droplets',
+    '/rebuild_vps': 'rebuild_vps_os',  # Tambahkan ini untuk menangani perintah /rebuild_vps
 }
-
 
 @bot.message_handler(content_types=['text'])
 def text_handler(m: Message):
