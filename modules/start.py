@@ -30,6 +30,10 @@ def start(d: Message):
             text='Cek droplets',
             callback_data='manage_droplets'
         ),
+        InlineKeyboardButton(
+            text='Rebuild VPS',
+            callback_data='rebuild_vps'
+        )
     )
     t = f'Selamat Datang <b>{bot_name}</b>\n\n' \
         'Anda Dapat Mengelola Akun DigitalOcean, membuat VPS, Dll.\n\n' \
@@ -40,6 +44,7 @@ def start(d: Message):
         '/bath_do - batch test accounts\n' \
         '/add_vps - membuat droplets\n' \
         '/sett_vps - list droplets\n' \
+        '/rebuild_vps - rebuild VPS\n' \
         ' \n'
     bot.send_message(
         text=t,
